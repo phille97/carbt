@@ -2,13 +2,9 @@
 HTML5 2D Car Game. Using JS and SVG
 
 ### TODO
-- Markup, css
-- JS Engine
-- > Map (SVG / XML)
-- > Player
-- > Control
-- > Collision
 - Timed laps
+- Advanced Hitbox
+- Advanced Maploading
 
 ## Future TODO
 - Multiplayer (Local and Online)
