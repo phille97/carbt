@@ -23,7 +23,6 @@ sTile.solid = false;
 sTile.color = '#EDC9AF';
 
 
-
 var MapLevels = {
     level_1: [
         [bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile],

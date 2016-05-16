@@ -46,20 +46,20 @@ var GameMap = {
 
 GameMap.loadLevel(MapLevels.level_1);
 
-
 // Player object
 var Car = {
     x: 50,
     y: 50,
     speed: 0,
     angle: 0,
-    height: 30,
-    width: 50,
+    color: "blue",
+    height: 20,
+    width: 30,
     max_speed: 7, // m/s
     acceleration: 1, // m/s^2 (same val for deaccel)
     draw: function() {
         ctx.save();
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = this.color;
 
         let transl_x = this.x + this.width/2;
         let transl_y = this.y + this.height/2;
@@ -93,7 +93,6 @@ var Car = {
 
         // Make the move.
         var futureTile = GameMap.getTile(this.x + this.width/2 + delta_x, this.y + this.height/2 + delta_y);
-        console.log(this.y);
         ctx.rect(this.x, this.y, 5, 5);
         if(futureTile.solid){
             if(!GameMap.getTile(this.x + this.width/2, this.y + this.height/2 + delta_y).solid){
