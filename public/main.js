@@ -1,4 +1,5 @@
 var canvas = document.getElementById("gameCanvas");
+var message = document.getElementById("message");
 var ctx = canvas.getContext("2d");
 
 // Control object
@@ -48,15 +49,25 @@ GameMap.loadLevel(MapLevels.level_1);
 
 // Player object
 var Car = {
+    // Position
     x: 50,
     y: 50,
     speed: 0,
     angle: 0,
+    // Looks
     color: "blue",
     height: 20,
     width: 30,
+    // Engine (GOTTA GO FAST)
     max_speed: 7, // m/s
     acceleration: 1, // m/s^2 (same val for deaccel)
+    // Laptimes
+    highscore: localStorage.getItem("highscore") || null,
+    lap_counter: 0,
+    last_lap: null,
+    lap_start_time: 0,
+    lap_timer: 0,
+    // Functions
     draw: function() {
         ctx.save();
         ctx.fillStyle = this.color;
@@ -74,16 +85,16 @@ var Car = {
     },
     update: function(delta) {
         if(Control.direction.right){
-            this.angle += 5;
+            this.angle += 5 + (this.max_speed - this.speed) * 0.5;
             if(this.angle > 360) this.angle = 0;
         }else if(Control.direction.left){
-            this.angle -= 5;
+            this.angle -= 5 + (this.max_speed - this.speed) * 0.5;
             if(this.angle < 0) this.angle = 360;
         }
 
         if(Control.direction.up && this.speed < this.max_speed){
             this.speed++;
-        }else if(Control.direction.down  && this.speed > 0){
+        }else if(Control.direction.down  && this.speed > -0.5){
             this.speed -= 0.5;
         }
 
@@ -93,8 +104,37 @@ var Car = {
 
         // Make the move.
         var futureTile = GameMap.getTile(this.x + this.width/2 + delta_x, this.y + this.height/2 + delta_y);
+	var currentTile = GameMap.getTile(this.x + this.width/2, this.y + this.height/2);
+
+        this.speed = this.speed * (1-futureTile.friction);
+
+	var nextIsSolid = futureTile.solid;
+
+	if (this.speed < 0.001) {
+            this.speed = 0;
+	}
+	if (futureTile.goal) {
+	    if (futureTile.goal === "-x" && delta_x > 0) {
+                nextIsSolid = true;
+	    } else if (!currentTile.goal) {
+		var timeNow = (new Date()).getTime()
+		if (this.lap_start_time) {
+		    this.last_lap = timeNow - this.lap_start_time;
+		    if (this.last_lap < this.highscore || this.highscore === null) {
+	                this.highscore = this.last_lap;
+			localStorage.setItem("highscore", this.highscore)
+		    }
+		}
+		this.lap_counter ++;
+	        this.lap_start_time = timeNow;
+	    }
+	}
+	if (this.lap_start_time) {
+	    this.lap_timer = (new Date()).getTime() - this.lap_start_time;
+	}
+
         ctx.rect(this.x, this.y, 5, 5);
-        if(futureTile.solid){
+	if(nextIsSolid){
             if(!GameMap.getTile(this.x + this.width/2, this.y + this.height/2 + delta_y).solid){
                 this.x -= delta_x;
                 this.speed = this.speed * 0.25;
@@ -107,8 +147,8 @@ var Car = {
                 this.speed = 0;
             }
         }else{
-            this.x += delta_x - (delta_x * futureTile.friction);
-            this.y += delta_y - (delta_y * futureTile.friction);
+            this.x += delta_x;
+            this.y += delta_y;
         }
     }
 };
@@ -169,6 +209,18 @@ function draw() {
     ctx.beginPath();
     Car.draw();
     ctx.closePath();
+
+    ctx.beginPath();
+    ctx.save();
+    ctx.fillStyle = 'black';
+    ctx.font = "20px monospace";
+    ctx.fillText("C A R B T", 40, 25);
+
+    ctx.fillText("Highscore: "+Car.highscore+" ms", 150, 245);
+    ctx.fillText("Current lap: "+ Car.lap_timer +" ms", 40, canvas.height - 60);
+    ctx.fillText("Last lap:    "+ Car.last_lap +" ms", 40, canvas.height - 40);
+    ctx.fill();
+    ctx.closePath();
 }
 
 
@@ -180,10 +232,16 @@ function gameLoop(){
     currentTime = (new Date()).getTime();
     if((currentTime - tickedTime) > 1000/TPS) {
         tick(currentTime - tickedTime - (1000 / TPS));
-        tickedTime = (new Date()).getTime();
+        tickedTime = currentTime;
     }
     draw();
     window.requestAnimationFrame(gameLoop);
 }
 
-window.requestAnimationFrame(gameLoop);
+message.innerHTML = "C A R B T<br>0.0.1"
+
+setTimeout(() => {
+    canvas.style.display = '';
+    message.style.display = 'none';
+    window.requestAnimationFrame(gameLoop);
+}, 1000)

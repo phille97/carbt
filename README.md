@@ -1,12 +1,7 @@
-# carbt
-HTML5 2D Car Game. Using JS and SVG
+# C A R B T
+HTML5 2D Car Game. Using JS and Canvas element
 
 ### TODO
-- Timed laps
-- Advanced Hitbox
 - Advanced Maploading
-
-## Future TODO
-- Multiplayer (Local and Online)
-- More Advanced Scoring
-- Interchangeable cars
+- Online Multiplayer
+- Changeable cars

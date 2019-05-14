@@ -9,11 +9,11 @@ var Tile = function(){
 };
 
 var rTile = Tile();
-rTile.friction = 0;
+rTile.friction = 0.05;
 rTile.solid = false;
 
 var bTile = Tile();
-rTile.friction = 0;
+bTile.friction = 0.5;
 bTile.solid = true;
 bTile.color = "#95a5a6";
 
@@ -21,6 +21,12 @@ var sTile = Tile();
 sTile.friction = 0.5;
 sTile.solid = false;
 sTile.color = '#EDC9AF';
+
+var goalTile = Object.assign(Tile(), rTile);
+goalTile.friction = 0.05;
+goalTile.goal = '-x'
+goalTile.solid = false;
+goalTile.color = 'red';
 
 
 var MapLevels = {
@@ -34,9 +40,9 @@ var MapLevels = {
         [bTile, rTile, rTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, rTile, rTile, rTile, rTile, rTile, bTile, rTile, rTile, bTile],
         [bTile, rTile, rTile, rTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, rTile, rTile, bTile],
         [bTile, rTile, rTile, rTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, rTile, rTile, rTile, bTile],
-        [bTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, bTile, bTile, bTile, bTile, rTile, rTile, rTile, rTile, rTile, bTile],
-        [bTile, sTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, bTile],
-        [bTile, sTile, sTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, bTile, bTile, bTile, bTile],
+        [bTile, rTile, rTile, rTile, rTile, rTile, rTile, goalTile, rTile, bTile, bTile, bTile, bTile, rTile, rTile, rTile, rTile, rTile, bTile],
+        [bTile, sTile, rTile, rTile, rTile, rTile, rTile, goalTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, bTile],
+        [bTile, sTile, sTile, rTile, rTile, rTile, rTile, goalTile, rTile, rTile, rTile, rTile, rTile, rTile, rTile, bTile, bTile, bTile, bTile],
         [bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile],
         [bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile, bTile],
     ]
